@@ -8,17 +8,32 @@ def is_number(s):
         return False
     return True
 
-def join_tokens(token_list,splitted_value):
-    length = token_list.__len__();
-    print(length)
-    if (length>1):
-        if (token_list[0].type == NUMBER and token_list[1].type == NUMBER):
-            print("here")
-            splitted_value.append(Token(NUMBER,token_list[0].value+token_list[1].value))
-            return join_tokens(splitted_value + token_list[2:],splitted_value)
-        else:
-            splitted_value.append(token_list[0])
-            return join_tokens(token_list[1:])
+def join_numbers(tokens):
+    numbers_to_join = []
+    for i in tokens:
+        if (i.type == NUMBER):
+            numbers_to_join.append(i.value)
+        elif (i.type != NUMBER):
+            return numbers_to_join
+
+def join_list(list):
+    list = "".join(list)
+    return int(list)
+
+def join_tokens(tokens):
+    joined_tokens = []
+    length = 0
+    for i in range(tokens.__len__()):
+        if (length == 0):
+            if (tokens[i].type == NUMBER):
+                join_numbers2 = join_numbers(tokens[i:])
+                length = join_numbers2.__len__()
+                joined_tokens.append(Token(NUMBER,join_list(join_numbers2)))
+            elif (tokens[i].type != NUMBER):
+                joined_tokens.append(tokens[i])
+                length = 1
+        length = length - 1
+    return joined_tokens
 
 def skan(string):
     string.split();
@@ -33,7 +48,8 @@ def skan(string):
             token_list.append(Token(MINUS, i))
         elif (i == "*"):
             token_list.append(Token(MULTIPLE, i))
+    token_list.append(Token(EOF,None))
     return token_list
 
 
-print(skan("24+54-6"))
+print(join_tokens(skan("243+15 4 *1 00")))
