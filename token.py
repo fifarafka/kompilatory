@@ -1,5 +1,3 @@
-NUMBER, PLUS, EOF, MULTIPLE = 'NUMBER', 'PLUS', 'EOF', 'MULTIPLE'
-
 class Token(object):
     def __init__(self, type, value):
         self.type = type
