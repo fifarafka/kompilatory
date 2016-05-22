@@ -20,4 +20,4 @@ class CodeGenerator(object):
             elif tree.token.type == DIVIDE:
                 self.orders_list.append('div')
         else:
-            self.orders_list.append('\"put %s\"' % tree.value)
+            self.orders_list.append('put %s' % tree.value)

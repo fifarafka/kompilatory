@@ -1,67 +1,53 @@
 from pythonds.basic.stack import Stack
-import sys
 import re
 
-path_pattern = re.compile("^(.)*\.py$")
-put_pattern = re.compile("^put ([0-9])+$")
 
-s = Stack()
+class Environment(object):
+    def __init__(self, args):
+        self.args = args
+        self.path_pattern = re.compile("^(.)*\.py$")
+        self.put_pattern = re.compile("^put ([0-9])+$")
+        self.stack = Stack()
 
-for arg in sys.argv:
-    if(put_pattern.match(arg)):
-        number = int(arg[4:])
-        print 'put %d' % number
+    def count(self):
+        for arg in self.args:
+            if (self.put_pattern.match(arg)):
+                number = int(arg[4:])
+                self.stack.push(number)
 
-        s.push(number)
+            elif (arg == 'add'):
 
-    elif(arg == 'add'):
-        print 'add'
+                number_1 = self.stack.pop()
+                number_2 = self.stack.pop()
+                result = number_1 + number_2
+                self.stack.push(result)
 
-        number_1 = s.pop()
-        number_2 = s.pop()
+            elif (arg == 'sub'):
 
-        result = number_1 + number_2
+                number_1 = self.stack.pop()
+                number_2 = self.stack.pop()
+                result = number_2 - number_1
+                self.stack.push(result)
 
-        s.push(result)
+            elif (arg == 'mul'):
+                number_1 = self.stack.pop()
+                number_2 = self.stack.pop()
+                result = number_1 * number_2
+                self.stack.push(result)
 
-    elif (arg == 'sub'):
-        print 'sub'
+            elif (arg == 'div'):
 
-        number_1 = s.pop()
-        number_2 = s.pop()
+                number_1 = self.stack.pop()
+                number_2 = self.stack.pop()
+                result = number_2 / number_1
+                self.stack.push(result)
 
-        result = number_1 - number_2
+            elif (arg == 'end'):
+                return self.stack.pop()
 
-        s.push(result)
+            elif (self.path_pattern.match(arg)):
+                pass
 
-    elif(arg == 'mul'):
-        print 'mul'
-
-        number_1 = s.pop()
-        number_2 = s.pop()
-
-        result = number_1 * number_2
-
-        s.push(result)
-
-    elif (arg == 'div'):
-        print 'div'
-
-        number_1 = s.pop()
-        number_2 = s.pop()
-
-        result = number_1 / number_2
-
-        s.push(result)
-
-    elif( arg == 'end'):
-        print 'end'
-        print
-        print 'The result is: %d' % s.pop()
-
-    # pierwszy argument to zawsze sciezka do skryptu - pomijamy
-    elif( path_pattern.match(arg) ):
-        pass
-
-    else:
-        print 'I got some strange input here: %s' % arg
+            else:
+                #jakies rzucanie wyjatkiem
+                print 'I got some strange input here: %s' % arg
