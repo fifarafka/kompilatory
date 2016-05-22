@@ -1,3 +1,5 @@
+import sys
+
 INTEGER, PLUS, MINUS, MULTIPLY, DIVIDE, LPAREN, RPAREN, EOF = (
     'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', '(', ')', 'EOF'
 )
@@ -13,11 +15,24 @@ class BinOp(AST):
         self.token = self.op = op
         self.right = right
 
+    def __str__(self):
+        return '({nodeLeft} op({op}) {nodeRight})'.format(
+            nodeLeft = self.left,
+            op = self.token.value,
+            nodeRight = self.right
+        )
+
+
 
 class Num(AST):
     def __init__(self, token):
         self.token = token
         self.value = token.value
+
+    def __str__(self):
+        return 'Node {value}'.format(
+            value = self.value
+        )
 
 
 class Parser(object):
